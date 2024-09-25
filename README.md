@@ -1,0 +1,3 @@
+pip install -r requirements
+Add .env file
+And run test_pipeline.ipynb
