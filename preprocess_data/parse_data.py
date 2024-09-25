@@ -300,6 +300,7 @@ class ParseHandler():
             }
 
             response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+            print(response)
             try:
                 cost = response.json()['usage']["prompt_tokens"] * 0.00000015 + response.json()['usage'][
                     "completion_tokens"] * 0.0000006

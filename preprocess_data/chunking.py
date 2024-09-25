@@ -155,7 +155,7 @@ class ChunkHandler():
                 a_content = re.sub(markdown_special_chars, '', article)
 
                 documents.append(
-                    {"raw_text": article, "content": a_content, "summary": self.get_chunk_context(a_content, pages[page_num]["content"]),
+                    {"raw_text": article, "content": a_content, "summary": self.get_chunk_context(a_content, pages[page_num-1]["content"]),
                      "src": pdf_info["src"], "chapter": "", "page": page_num, "reference": pdf_info["reference"]})
         else:
             article_pattern = r'(#+\s+Điều\s+\d+[:.].*?)(?=\n+#+\s+Mẫu số|\n+#+\s+Phụ lục|\n+#+\s+Điều\s+\d+|\n+#+\s+Chương\s+[IVXLCDM]+|$)'
@@ -187,7 +187,7 @@ class ChunkHandler():
                         for muc in muc_luc:
                             if article.find(muc["object"]) != -1:
                                 documents.append({"raw_text": article, "content": a_content,
-                                                  "summary": self.get_chunk_context(a_content, pages[page_num]["content"]), "src": pdf_info["src"],
+                                                  "summary": self.get_chunk_context(a_content, pages[page_num-1]["content"]), "src": pdf_info["src"],
                                                   "chapter": chapter_title, "page": page_num,
                                                   "reference": pdf_info["reference"]})
                                 break
