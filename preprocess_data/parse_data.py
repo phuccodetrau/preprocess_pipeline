@@ -23,11 +23,17 @@ class ParseHandler():
                                     """
     detect_equation_prompt = """You are an expert in equation dectection. If the input image have any equations, response "Equation". If there aren't any equations in the image, respponse "No equation"."""
     detect_table_prompt = """You are an expert in table dectection. If the input image have any tables, response "Table". If there aren't any tables in the image, respponse "No table"."""
-    parse_table_prompt = """You are an expert in table dectection. Focus on each table in the input image and response the markdown of each table with the index of each table in the begin of table (i.e. Table 1:, Table 2:, ...etc) without any additional explanation or description. Try to keep all the text of each table at the right cell in the image and do not annotate ```markdown."""
+    parse_table_prompt = """You are an expert in table dectection. Focus on each table in the input image:
+                                - Just parse the table having both horizontal and vertical borders to enclose the content inside the table cells.
+                                - Do not confuse table with equation including fraction formula with the horizontal black lines only.
+                                - Try to keep all the text of each table at the right cell in the image.
+                                - Response the markdown of each table with the index of each table in the begin of table (i.e. Table 1:, Table 2:, ...etc) without any additional explanation or description and do not annotate ```markdown.
+                                """
     parse_equation_prompt = """You are an expert in equation dectection. Focus on each equation in the input image:
                                 - The equation can be on multiple lines, detect all the lines of the equation. 
-                                - Convert the equation in the image into a single latex block with all expressions inside a pair of dollar signs ($$). Try to get both legs before and after the equal sign(=) (i.e. $$ \text{Gross bonus amount} = \text{Bonus} \times \left(100 - \frac{\text{Date of absent in a year}}{22 \times 12}\right) $$)
-                                - Response the equation with the index of each equation in the begin of equation (i.e. Equation 1:, Equation 2:, ...etc) without any additional explanation or description.
+                                - Equations will begin with a concept (e.g., Phụ cấp làm thêm ngoài giờ (mỗi 1 giờ)) and one or more equal signs followed by the formula for calculating the value of that concept.
+                                - Convert the equation in the image into a single latex block with all expressions inside a pair of dollar signs ($$). Try to get the concept calculated and all the formula after the equal signs(=) (e.g., $$ \text{Gross bonus amount} = \text{Bonus} \times \left(100 - \frac{\text{Date of absent in a year}}{22 \times 12}\right) $$)
+                                - Response the equation with the index of each equation in the begin of equation (i.e. Equation 1:, Equation 2:, ...etc) without any additional explanation or description and do not annotate ```markdown.
      """
 
     @staticmethod
@@ -64,7 +70,7 @@ class ParseHandler():
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "gpt-4o",
+            "model": "gpt-4o-2024-08-06",
             "messages": [
                 {
                     "role": "system",
@@ -110,7 +116,7 @@ class ParseHandler():
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "gpt-4o",
+            "model": "gpt-4o-2024-08-06",
             "messages": [
                 {
                     "role": "system",
@@ -156,7 +162,7 @@ class ParseHandler():
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "gpt-4o",
+            "model": "gpt-4o-2024-08-06",
             "messages": [
                 {
                     "role": "system",
