@@ -20,15 +20,17 @@ class ParseHandler():
                         6. Only respond with the markdown content, without any additional explanation or description.
                         7. Don't annotate ```markdown\n  in the response
 
-                                    """
+    """
     detect_equation_prompt = """You are an expert in equation dectection. If the input image have any equations, response "Equation". If there aren't any equations in the image, respponse "No equation"."""
-    detect_table_prompt = """You are an expert in table dectection. If the input image have any tables, response "Table". If there aren't any tables in the image, respponse "No table"."""
+    detect_table_prompt = """You are an expert in table dectection. If the input image have any tables, response "Table". If there aren't any tables in the image, respponse "No table".
+    """
     parse_table_prompt = """You are an expert in table dectection. Focus on each table in the input image:
-                                - Just parse the table having both horizontal and vertical borders to enclose the content inside the table cells.
+                                - Just detect the table having both horizontal and vertical borders to enclose the content inside the table cells.
                                 - Do not confuse table with equation including fraction formula with the horizontal black lines only.
                                 - Try to keep all the text of each table at the right cell in the image.
+                                - The table may have nested columns. Try to recogize the hierarchical structure of columns to response exact information in the table
                                 - Response the markdown of each table with the index of each table in the begin of table (i.e. Table 1:, Table 2:, ...etc) without any additional explanation or description and do not annotate ```markdown.
-                                """
+    """
     parse_equation_prompt = """You are an expert in equation dectection. Focus on each equation in the input image:
                                 - The equation can be on multiple lines, detect all the lines of the equation. 
                                 - Equations will begin with a concept (e.g., Phụ cấp làm thêm ngoài giờ (mỗi 1 giờ)) and one or more equal signs followed by the formula for calculating the value of that concept.
@@ -86,7 +88,7 @@ class ParseHandler():
                     "content": [
                         {
                             "type": "text",
-                            "text": """Parse table in this image"""
+                            "text": """Convert table in this image to mardown"""
                         },
                         {
                             "type": "image_url",
@@ -116,7 +118,7 @@ class ParseHandler():
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "gpt-4o-2024-08-06",
+            "model": "gpt-4o",
             "messages": [
                 {
                     "role": "system",
@@ -162,7 +164,7 @@ class ParseHandler():
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "gpt-4o-2024-08-06",
+            "model": "gpt-4o",
             "messages": [
                 {
                     "role": "system",
@@ -306,7 +308,7 @@ class ParseHandler():
             }
 
             response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-            print(response)
+            print(response.json()['choices'][0]['message']['content'])
             try:
                 cost = response.json()['usage']["prompt_tokens"] * 0.00000015 + response.json()['usage'][
                     "completion_tokens"] * 0.0000006
